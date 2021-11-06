@@ -9,7 +9,7 @@ namespace BronhomunalEvolved.Types
 	public class RecieveMessage
 	{
 		public String? Text { get; set; }
-		public List<Base64File>? Files { get; set; }
+		public List<Base64File>? Photos { get; set; }
 		public String? AuthorId { get; set; }
 		public Int64? SendTime { get; set; }
 		public String? IntegratorTopic { get; set; }

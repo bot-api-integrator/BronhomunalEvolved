@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace BronhomunalEvolved.Types
 {
-	internal class SendMessage
+	public  class SendMessage
 	{
+		public String? Text { get; set; }
+		public List<Base64File>? Photos { get; set; }
 	}
 }
