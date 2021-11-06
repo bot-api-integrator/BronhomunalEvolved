@@ -10,6 +10,7 @@ namespace BronhomunalEvolved.Types
 	{
 		public string? Text { get; set; }
 		public List<Base64File>? Files { get; set; }
+		public List<Base64File>? Photos { get; set; }
 		public string? AuthorId { get; set; }
 		public string? SendTime { get; set; }
 		public string? IntegratorTopic { get; set; }
@@ -19,13 +20,13 @@ namespace BronhomunalEvolved.Types
 		public Message(string? text, List<Base64File>? files, string integratorTopic) 
 		{
 			Text = text;
-			Files = files;
+			Photos = Photos;
 			IntegratorTopic = integratorTopic;
 		}
 		public Message(RecieveMessage recieveMessage)
 		{
 			source = recieveMessage;
-			Files = source.Files;
+			Photos = source.Photos;
 			Text = source.Text;
 		}
 

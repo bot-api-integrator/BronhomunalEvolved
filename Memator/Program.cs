@@ -5,6 +5,7 @@ namespace Memator
 	public static class Program
 	{
 		private static bool _help = false;
+		private static Client _client;
 		
 		public static void Main(string[] args)
 		{
@@ -19,6 +20,8 @@ namespace Memator
 			{
 				return;
 			}
+
+			_client
 		}
 
 
