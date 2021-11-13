@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Confluent.Kafka" Version="1.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="BhLib">
       <HintPath>..\shared\libs\BhLib.dll</HintPath>
     </Reference>

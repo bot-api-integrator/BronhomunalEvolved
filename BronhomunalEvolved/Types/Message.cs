@@ -8,6 +8,7 @@ namespace BronhomunalEvolved.Types
 {
 	public class Message
 	{
+		private Client client;
 		public string? Text { get; set; }
 		public List<Base64File>? Files { get; set; }
 		public List<Base64File>? Photos { get; set; }
@@ -30,6 +31,15 @@ namespace BronhomunalEvolved.Types
 			Text = source.Text;
 		}
 
+		public Message SetClient(Client client)
+		{
+			if (client is not null)
+				return this;
+
+			this.client = client;
+			return this;
+		}
+
 		public void Respond(string text)
 		{
 			Respond(text, null);
@@ -42,7 +52,18 @@ namespace BronhomunalEvolved.Types
 
 		public void Respond(string? text, IEnumerable<Base64File>? files)
 		{
-			Globals.Connection.SendMessage(new Message(Text,Files,IntegratorTopic));
+			client.SendMessage(new Message(Text,Files,IntegratorTopic));
+		}
+
+		public String ToString()
+		{
+			JsonSerializerOptions options = new JsonSerializerOptions
+			{
+				WriteIndented = true,
+				PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+			};
+
+			return JsonSerializer.Serialize(this, options);
 		}
 	}
 }

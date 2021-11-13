@@ -8,3 +8,4 @@ global using BhLib.Filesystem;
 global using BhLib.Network;
 global using System.Text.Json;
 global using BronhomunalEvolved;
+global using BronhomunalEvolved.Types;
