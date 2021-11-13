@@ -7,4 +7,3 @@ global using BhLib;
 global using BhLib.Filesystem;
 global using BhLib.Network;
 global using System.Text.Json;
-global using BronhomunalEvolved.Connections;

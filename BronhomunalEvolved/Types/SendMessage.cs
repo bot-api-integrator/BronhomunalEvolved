@@ -10,5 +10,6 @@ namespace BronhomunalEvolved.Types
 	{
 		public String? Text { get; set; }
 		public List<Base64File>? Photos { get; set; }
+		public String? IntegratorDestinationData { get; set; }
 	}
 }

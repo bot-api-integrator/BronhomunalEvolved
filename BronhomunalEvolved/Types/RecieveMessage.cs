@@ -13,6 +13,8 @@ namespace BronhomunalEvolved.Types
 		public String? AuthorId { get; set; }
 		public Int64? SendTime { get; set; }
 		public String? IntegratorTopic { get; set; }
+		public String? IntegratorDestinationData { get; set; }
+
 
 		public RecieveMessage() { }
 	}
