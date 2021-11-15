@@ -31,6 +31,8 @@ namespace BronhomunalEvolved
 		// Топик, с которым работает данный модуль
 		public String SubscribeTopic { get; set; } = "MematorModule";
 
+		public String AddListenerTopic { get; set; } = "AddListener";
+
 		// Разрешить применение масштабирования с учетом содержимого (жмых-эффект)
 		public Boolean AllowCAS { get; set; } = true;
 

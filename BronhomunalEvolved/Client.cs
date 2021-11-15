@@ -18,7 +18,7 @@ namespace BronhomunalEvolved
 		{
             _server = server;
 		}
-		public async void StartAsync(String topic)
+		public async void Subscribe(String topic)
 		{
 			await Task.Run(()=>Listen(topic));
 		}
@@ -54,7 +54,7 @@ namespace BronhomunalEvolved
                                 WriteIndented = true,
                                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                             });
-                            RecieveMessage?.Invoke(this, new Message(recieveMessage));
+                            RecieveMessage?.Invoke(this, new Message(recieveMessage).SetClient(this));
                         }
                         catch (ConsumeException e)
                         {
@@ -68,7 +68,8 @@ namespace BronhomunalEvolved
                 }
             }
         }
-		public void SendMessage(Message message)
+
+        private void Produce(String topic, String message)
 		{
             var conf = new ProducerConfig { BootstrapServers = _server };
 
@@ -79,11 +80,15 @@ namespace BronhomunalEvolved
 
             using (var p = new ProducerBuilder<Null, string>(conf).Build())
             {
-                
-                p.Produce(message.IntegratorTopic, new Message<Null, string> { Value = message.ToString()}, handler);
+
+                p.Produce(topic, new Message<Null, string> { Value = message }, handler);
                 // wait for up to 10 seconds for any inflight messages to be delivered.
                 //p.Flush(TimeSpan.FromSeconds(10));
             }
+        }
+		public void SendMessage(Message message)
+		{
+            Produce(message.IntegratorTopic, message.ToString());
         }
 
 	}
