@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Memator
+namespace vk_api_balancer
 {
 	public class Config
 	{
@@ -15,7 +14,7 @@ namespace Memator
 			WriteIndented = true,
 			PropertyNamingPolicy = JsonNamingPolicy.CamelCase
 		};
-		private static readonly String _defaultConfigPath = AppDomain.CurrentDomain.FriendlyName+".json";
+		private static readonly String _defaultConfigPath = AppDomain.CurrentDomain.FriendlyName + ".json";
 
 
 		// НЕСЕРИАЛИЗУЕМОЕ ПОЛЕ
@@ -25,20 +24,23 @@ namespace Memator
 
 
 		// СЕРИАЛИЗУЕМЫЕ СВОЙСТВА
-		// Строка подключения к серверу
+		/// Строка подключения к серверу
 		public String KafkaServer { get; set; } = "localhost:9092";
 
-		// Топик, с которым работает данный модуль
-		public String SubscribeTopic { get; set; } = "MematorModule";
+		/// Топик, из которого читаются данные
+		public String SubscribeTopic { get; set; } = "VkSendMessage";
 
-		public String AddListenerTopic { get; set; } = "AddListener";
+		/// Топик, в который пишутся данные
+		public String ProduceTopic { get; set; } = "VkRecieveMessage";
 
-		// Разрешить применение масштабирования с учетом содержимого (жмых-эффект)
-		public Boolean AllowCAS { get; set; } = true;
+		/// Токен Vk API. По умолчанию нюхай бебру
+		public String VkApiToken { get; set; } = "1e3e8d31e3c8094f00bddac3431fa1dde34ef4845b3807ad620ff4cd5584c85808da338eba2f535313ddd";
 
-		//Разрешить переворачивать картинку
-		public Boolean AllowFlip { get; set; } = true;
+		/// ID группы (бота) ВК. По умолчанию - бронхомунал
+		public UInt64 GroupId { get; set; } = 204006161;
 
+		/// ID пользователя для загрузки файлов на сервер ВК. По умолчанию - бронух
+		public UInt64 PeerId { get; set; } = 88798690;
 
 		/// <summary>
 		/// Пытается получить значние указанной переменной среды. В случае неудачи вернёт NULL.
@@ -64,7 +66,7 @@ namespace Memator
 			}
 			catch (Exception ex)
 			{
-				Logger.Error(ex); 
+				Logger.Error(ex);
 			}
 
 			return env;
@@ -98,14 +100,14 @@ namespace Memator
 			Config? config;
 			try
 			{
-				config = JsonSerializer.Deserialize<Config>(File.ReadAllText(path),_serializerOptions);
+				config = JsonSerializer.Deserialize<Config>(File.ReadAllText(path), _serializerOptions);
 			}
 			catch (Exception ex)
 			{
 				Logger.Error(ex);
 				config = new Config();
 			}
-			
+
 			config ??= new Config();
 			config.configPath = path;
 			config.Save();
@@ -118,18 +120,19 @@ namespace Memator
 		/// </summary>
 		public void Save()
 		{
-			Environment.SetEnvironmentVariable("SUBSCRIBE_TOPIC",SubscribeTopic);
-			Environment.SetEnvironmentVariable("KAFKA_SERVER",KafkaServer);
-
-			Environment.SetEnvironmentVariable("ALLOW_CAS", AllowCAS.ToString());
-			Environment.SetEnvironmentVariable("ALLOW_FLIP",AllowFlip.ToString());
+			Environment.SetEnvironmentVariable("SUBSCRIBE_TOPIC", SubscribeTopic);
+			Environment.SetEnvironmentVariable("KAFKA_SERVER", KafkaServer);
+			Environment.SetEnvironmentVariable("PRODUCE_TOPIC", ProduceTopic);
+			Environment.SetEnvironmentVariable("VK_API_TOKEN", VkApiToken);
+			Environment.SetEnvironmentVariable("GROUP_ID", GroupId.ToString());
+			Environment.SetEnvironmentVariable("PEER_ID", PeerId.ToString());
 
 		}
 
 		/// <summary>
 		/// Сохраняет конфигурацию в файл по умолчанию
 		/// </summary>
-		[Obsolete(message:"Приложение конфигурируется с помощью переменных среды.")]
+		[Obsolete(message: "Приложение конфигурируется с помощью переменных среды.")]
 		public void SaveToFile()
 		{
 			SaveToFile(configPath);
@@ -162,9 +165,10 @@ namespace Memator
 
 			config.SubscribeTopic = TryGetEnvString("SUBSCRIBE_TOPIC") ?? config.SubscribeTopic;
 			config.KafkaServer = TryGetEnvString("KAFKA_SERVER") ?? config.KafkaServer;
-
-			config.AllowCAS = TryGetEnvBool("ALLOW_CAS") ?? config.AllowCAS;
-			config.AllowFlip = TryGetEnvBool("ALLOW_FLIP") ?? config.AllowFlip;
+			config.ProduceTopic = TryGetEnvString("PRODUCE_TOPIC") ?? config.ProduceTopic;
+			config.VkApiToken = TryGetEnvString("VK_API_TOKEN") ?? config.VkApiToken;
+			config.GroupId = TryGetEnvInt("GROUP_ID") ?? config.GroupId;
+			config.PeerId = TryGetEnvInt("PEER_ID") ?? config.PeerId;
 
 			return config;
 		}

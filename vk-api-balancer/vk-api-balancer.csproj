@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>vk_api_balancer</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Confluent.Kafka" Version="1.8.2" />
+    <PackageReference Include="VkNet" Version="1.67.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BronhomunalEvolved\BronhomunalEvolved.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BhLib">
+		<HintPath>..\shared\libs\BhLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -31,6 +31,7 @@ namespace BronhomunalEvolved
 		{
             var conf = new ConsumerConfig
             {
+                GroupId = "default",
                 BootstrapServers = _server,
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };

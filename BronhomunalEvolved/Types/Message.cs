@@ -15,6 +15,7 @@ namespace BronhomunalEvolved.Types
 		public string? AuthorId { get; set; }
 		public string? SendTime { get; set; }
 		public string? IntegratorTopic { get; set; }
+		public string? IntegratorDestinationData { get; set; }
 
 		private RecieveMessage? source;
 
@@ -29,6 +30,10 @@ namespace BronhomunalEvolved.Types
 			source = recieveMessage;
 			Photos = source.Photos;
 			Text = source.Text;
+			IntegratorTopic=recieveMessage.IntegratorTopic;
+			AuthorId = recieveMessage.AuthorId;
+			SendTime = DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString();
+			IntegratorDestinationData = recieveMessage.IntegratorDestinationData;
 		}
 
 		public Message SetClient(Client client)
